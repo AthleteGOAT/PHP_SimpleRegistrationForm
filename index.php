@@ -1,6 +1,6 @@
 <?php
     include("database.php");
-    
+    include("header.html");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,12 +9,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<body>
-    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"])?>" method="post">
-        <h2>Welcome to my Simple Registration Form!</h2>
-        username: <br>
+<body styles="text-align:center;">
+    <form style="text-align:center;" action="<?php htmlspecialchars($_SERVER["PHP_SELF"])?>" method="post">
+        username:
         <input type="text" name="username"><br>
-        password: <br>
+        password:
         <input type="password" name="password"> <br>
         <input type="submit" name="submit" value="Register"><br>
     </form>
@@ -22,7 +21,7 @@
 </html>
 
 <?php 
-
+    
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         $username = filter_input(INPUT_POST,"username", FILTER_SANITIZE_SPECIAL_CHARS);
         $password = filter_input(INPUT_POST,"password", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -36,13 +35,15 @@
             $sql = "INSERT INTO users (username, password) VALUES ('$username', '$hash')";
             try{
                 mysqli_query($conn, $sql);
-                echo "You are now registered!";
+                header("Location: registration_done.php");
             }
             catch(mysqli_sql_exception){
-                echo "that username is taken!";
+                header("Location: registration_failed.php");
             }
            
         }
     }
+
+    include("footer.html");
     mysqli_close($conn);
 ?>
